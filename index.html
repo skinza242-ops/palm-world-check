@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Palm World Pro - Premium Palm Reading App - $200 Version</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
+body{background:linear-gradient(#0f0c29,#302b63,#24243e);color:#fff;min-height:100vh;padding-bottom:90px}
+.top{display:flex;justify-content:space-between;padding:12px 15px;font-size:13px;font-weight:bold}
+.top span{background:#ffcc00;color:#000;padding:5px 10px;border-radius:20px}
+.hero{text-align:center;padding:5px 15px 15px}
+.hero h1{font-size:32px;color:#ffcc00}
+.hero p{color:#ddd;font-size:13px;margin-top:5px}
+.card{background:#fff;color:#222;max-width:520px;margin:0 auto 20px;padding:20px;border-radius:24px;box-shadow:0 10px 30px rgba(0,0,0,.4)}
+.badge{display:inline-block;background:#ffcc00;padding:5px 12px;border-radius:20px;font-size:12px;font-weight:bold}
+.camBox{position:relative;background:#111;border-radius:18px;overflow:hidden;min-height:290px;display:flex;align-items:center;justify-content:center;text-align:center;margin-top:10px}
+#video,#previewImg{width:100%;max-height:380px;object-fit:cover;display:none}
+#placeholder{padding:30px 15px;color:#fff}
+.btn{width:100%;border:none;padding:15px;border-radius:14px;font-size:16px;font-weight:bold;cursor:pointer;margin-top:10px}
+.btn-cam{background:#ff9800;color:#fff;font-size:18px}
+.btn-cap{background:#00a651;color:#fff;display:none}
+.btn-retake{background:#eee;color:#333;display:none}
+.btn-read{background:#7b2ff7;color:#fff;font-size:19px;border:3px solid #ffcc00}
+.btn-wa{background:#25D366;color:#fff}
+label{font-weight:bold;font-size:13px;display:block;margin-top:14px}
+select,input{width:100%;padding:12px;margin-top:6px;border:1px solid #ddd;border-radius:11px;font-size:14px;background:#f9f9f9}
+.row{display:flex;gap:10px}.row>div{flex:1}
+#loading{display:none;text-align:center;padding:15px;font-weight:bold;color:#7b2ff7}
+.bar{height:10px;background:#eee;border-radius:20px;overflow:hidden;margin-top:10px}
+.fill{height:100%;width:0%;background:#7b2ff7;transition:width .3s}
+#result{display:none;margin-top:16px}
+.lineBox{background:#f8f0ff;border-radius:14px;padding:12px;margin-top:10px}
+.lineBox b{color:#7b2ff7}
+.meter{height:8px;background:#e5d9ff;border-radius:20px;margin-top:6px;overflow:hidden}
+.meter i{display:block;height:100%;background:#7b2ff7}
+.lucky{display:flex;gap:10px;margin-top:12px}.lucky div{flex:1;background:#fff3cd;padding:10px;border-radius:12px;text-align:center;font-size:13px}
+.sticky{position:fixed;bottom:0;left:0;right:0;background:#fff;padding:10px;box-shadow:0 -5px 20px rgba(0,0,0,.3);z-index:99}
+.sticky button{background:#7b2ff7;color:#fff;width:100%;border:none;padding:16px;border-radius:14px;font-size:19px;font-weight:bold}
+.note{font-size:11px;color:#888;text-align:center;margin-top:10px}
+</style>
+</head>
+<body>
+<div class="top"><span>✋ PALM WORLD PRO</span><span>⭐ 4.9 | PREMIUM</span></div>
+<div class="hero"><h1>Hath Ki Lakeer</h1><p>World's No.1 Premium Palm Reading - Camera Se Photo Lo</p></div>
+<div class="card">
+<span class="badge">🔥 1st READING FREE - PREMIUM VERSION</span>
+<h3 style="text-align:center;margin-top:8px">Step 1 - Hath Ki Photo Lo</h3>
+<div class="camBox">
+<div id="placeholder"><div style="font-size:50px">📸</div><b>Camera Se Hath Ki Photo Lein</b><p style="font-size:13px;margin-top:8px">Seedha Hath, Saaf Roshni Me Rakhein</p></div>
+<video id="video" autoplay playsinline></video>
+<img id="previewImg" alt="Selected palm preview">
+</div>
+<button class="btn btn-cam" onclick="openCamera()">📷 CAMERA KHOLO - DIRECT PHOTO LO</button>
+<button class="btn btn-cap" id="capBtn" onclick="takePhoto()">✅ PHOTO LO - CAPTURE KARO</button>
+<button class="btn btn-retake" id="retakeBtn" onclick="retake()">🔄 Dobara Photo Lo</button>
+<label>Ya Gallery Se Photo Chunein</label>
+<input type="file" id="gallery" accept="image/*">
+<label>Language / Zuban</label>
+<select id="lang"><option value="ur">Urdu / Roman Urdu</option><option value="en">English</option></select>
+<div class="row"><div><label>Country / Mulk</label><select id="country"><option>Pakistan</option><option>India</option><option>Bangladesh</option><option>USA</option><option>UK</option><option>Canada</option><option>UAE / Dubai</option><option>Saudi Arabia</option><option>Other</option></select></div><div><label>Gender</label><select id="gender"><option>Larki / Female</option><option>Larka / Male</option></select></div></div>
+<div class="row"><div><label>Hath / Hand</label><select id="hand"><option>Right Hath</option><option>Left Hath</option></select></div><div><label>Sawal / Question</label><select id="ques"><option>Shadi / Love</option><option>Paisa / Career</option><option>Sehat / Health</option><option>Future</option></select></div></div>
+<button class="btn btn-read" onclick="startReading()">🔮 MERI READING DEKHEIN</button>
+<div id="loading">🔍 Aapki Lakeerein Parhi Ja Rahi Hain...<div class="bar"><div class="fill" id="fill"></div></div><p id="loadTxt" style="font-size:12px;margin-top:8px;color:#666">Heart Line check ho rahi hai...</p></div>
+<div id="result">
+<h3 style="color:#7b2ff7;text-align:center">✨ Aapki Premium Reading</h3>
+<p id="mainText" style="line-height:1.6;font-size:14px;margin-top:10px"></p>
+<div class="lucky"><div><b>🍀 Lucky Number</b><br><span id="luckyNum" style="font-size:20px;font-weight:bold">7</span></div><div><b>🎨 Lucky Color</b><br><span id="luckyColor" style="font-size:16px;font-weight:bold">Green</span></div><div><b>📅 Lucky Day</b><br><span style="font-size:16px;font-weight:bold">Friday</span></div></div>
+<div class="lineBox"><b>❤️ Heart Line - Mohabbat - 88%</b><p id="heartTxt" style="font-size:13px"></p><div class="meter"><i style="width:88%"></i></div></div>
+<div class="lineBox"><b>🧠 Head Line - Dimagh / Career - 82%</b><p id="headTxt" style="font-size:13px"></p><div class="meter"><i style="width:82%"></i></div></div>
+<div class="lineBox"><b>🌿 Life Line - Sehat / Zindagi - 91%</b><p id="lifeTxt" style="font-size:13px"></p><div class="meter"><i style="width:91%"></i></div></div>
+<div class="lineBox"><b>💰 Fate Line - Paisa / Qismat - 78%</b><p id="fateTxt" style="font-size:13px"></p><div class="meter"><i style="width:78%"></i></div></div>
+<div class="lineBox"><b>💍 Marriage Line - Shadi - 85%</b><p id="marryTxt" style="font-size:13px"></p><div class="meter"><i style="width:85%"></i></div></div>
+<!-- BUYER APNA NUMBER YAHAN DALEGA - 923001234567 ki jagah apna number likhein -->
+<a href="https://wa.me/923001234567?text=Salam%20Mujhe%20Full%20Premium%20Reading%20Chahiye" class="btn btn-wa" style="display:block;text-align:center;text-decoration:none;padding:15px">💬 Full Premium Reading Ke Liye WhatsApp Karein</a>
+<p class="note">Ye reading entertainment ke liye hai. Aapki photo sirf aapke phone me rehti hai.</p>
+</div>
+</div>
+<div class="sticky"><button onclick="startReading()">🔮 MERI READING DEKHEIN 👆</button></div>
+<canvas id="canvas" style="display:none"></canvas>
+<script>
+let stream=null;
+async function openCamera(){
+ try{stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:"environment"}});
+ let v=document.getElementById('video'); v.srcObject=stream; v.style.display='block';
+ document.getElementById('placeholder').style.display='none';
+ document.getElementById('previewImg').style.display='none';
+ document.getElementById('capBtn').style.display='block';
+ document.getElementById('retakeBtn').style.display='none';
+ }catch(e){alert('Camera Allow Karo! Permission ON karo.');}
+}
+function takePhoto(){
+ let v=document.getElementById('video'); let c=document.getElementById('canvas');
+ c.width=v.videoWidth||640; c.height=v.videoHeight||480;
+ c.getContext('2d').drawImage(v,0,0,c.width,c.height);
+ let img=document.getElementById('previewImg'); img.src=c.toDataURL('image/jpeg'); img.style.display='block';
+ v.style.display='none'; document.getElementById('capBtn').style.display='none';
+ document.getElementById('retakeBtn').style.display='block';
+ if(stream) stream.getTracks().forEach(t=>t.stop());
+ alert('Photo Ho Gayi! Ab MERI READING DEKHEIN Dabao');
+}
+function retake(){document.getElementById('previewImg').style.display='none'; openCamera();}
+document.getElementById('gallery').addEventListener('change',function(){
+ let f=this.files[0]; if(!f) return;
+ let img=document.getElementById('previewImg'); img.src=URL.createObjectURL(f); img.style.display='block';
+ document.getElementById('placeholder').style.display='none';
+ document.getElementById('video').style.display='none';
+ alert('Photo Aa Gayi! Ab MERI READING DEKHEIN Dabao');
+});
+function startReading(){
+ let img=document.getElementById('previewImg');
+ if(!img.src || img.src==""){alert('Pehle Hath Ki Photo Lo! Camera ya Gallery Se'); return;}
+ document.getElementById('loading').style.display='block';
+ document.getElementById('result').style.display='none';
+ let fill=document.getElementById('fill'); let txt=document.getElementById('loadTxt');
+ let steps=["Heart Line check ho rahi hai...","Head Line check ho rahi hai...","Life Line check ho rahi hai...","Fate Line check ho rahi hai...","Reading tayyar ho rahi hai..."];
+ let i=0; let iv=setInterval(()=>{fill.style.width=(i+1)*20+'%'; txt.innerText=steps[i]; i++; if(i>=5){clearInterval(iv); showResult();}},600);
+}
+function showResult(){
+ document.getElementById('loading').style.display='none';
+ let c=document.getElementById('country').value, g=document.getElementById('gender').value, h=document.getElementById('hand').value, q=document.getElementById('ques').value;
+ let r=document.getElementById('result'); r.style.display='block';
+ let lucky=Math.floor(Math.random()*9)+1; document.getElementById('luckyNum').innerText=lucky;
+ let colors=["Green","Red","Blue","Golden","White"]; document.getElementById('luckyColor').innerText=colors[Math.floor(Math.random()*colors.length)];
+ document.getElementById('mainText').innerHTML="Mulk: <b>"+c+"</b> | Gender: <b>"+g+"</b> | Hath: <b>"+h+"</b> | Sawal: <b>"+q+"</b><br><br>Mubarak ho! Aapke hath ki lakeerein bohat mazboot hain. Aapke <b>"+q+"</b> wale sawal ka jawab <b>YES</b> hai. Aane wale 3 mahine me bari khush khabri aayegi. Mehnat ka phal zaroor milega.";
+ document.getElementById('heartTxt').innerText="Aap dil ke sachay hain. Mohabbat me kamyabi milegi. Shadi ki lakeer saaf hai.";
+ document.getElementById('headTxt').innerText="Dimagh tez hai. Career me bara faisla faida dega.";
+ document.getElementById('lifeTxt').innerText="Sehat achi rahegi. Lambi aur khush zindagi ki lakeer hai.";
+ document.getElementById('fateTxt').innerText="Paisa achanak aayega. Qismat ka sitara buland hai.";
+ document.getElementById('marryTxt').innerText="Shadi ki lakeer kehti hai, jald hi acha rishta aayega. Dil ka rishta pakka hoga.";
+ r.scrollIntoView({behavior:'smooth'});
+}
+</script>
+</body>
+</html>
